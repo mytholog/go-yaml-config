@@ -7,20 +7,19 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/go-yaml/yaml"
 	"github.com/jinzhu/copier"
-	log "github.com/rowdyroad/go-simple-logger"
+	"gopkg.in/yaml.v2"
 )
 
 //LoadConfigFromFile loading config from yaml file
 func LoadConfigFromFile(config interface{}, configFile string, defaultValue interface{}) string {
-	log.Debugf("Reading configuration from '%s'", configFile)
+	//log.Debugf("Reading configuration from '%s'", configFile)
 
 	data, err := ioutil.ReadFile(configFile)
 	if err != nil {
-		log.Warn("Configuration not found")
+		//log.Warn("Configuration not found")
 		if defaultValue != nil {
-			log.Warn("Default value is defined. Using it.")
+			//log.Warn("Default value is defined. Using it.")
 			copier.Copy(config, defaultValue)
 			return ""
 		}
@@ -28,9 +27,9 @@ func LoadConfigFromFile(config interface{}, configFile string, defaultValue inte
 	}
 
 	if err := yaml.Unmarshal([]byte(os.ExpandEnv(string(data))), config); err != nil {
-		log.Warn("Configuration incorrect ")
+		//log.Warn("Configuration incorrect ")
 		if defaultValue != nil {
-			log.Warn("Default value is defined. Use it.")
+			//log.Warn("Default value is defined. Use it.")
 			copier.Copy(config, defaultValue)
 			return ""
 		}
@@ -41,18 +40,18 @@ func LoadConfigFromFile(config interface{}, configFile string, defaultValue inte
 		filepath.Dir(configFile),
 		strings.TrimSuffix(filepath.Base(configFile), filepath.Ext(configFile))+".custom"+filepath.Ext(configFile),
 	)
-	log.Debugf("Try to read custom configuration from '%s'...", customConfigFile)
+	//log.Debugf("Try to read custom configuration from '%s'...", customConfigFile)
 	data, err = ioutil.ReadFile(customConfigFile)
 	if err == nil {
-		log.Debugf("Reading custom configuration from '%s'", customConfigFile)
+		//log.Debugf("Reading custom configuration from '%s'", customConfigFile)
 		if err := yaml.Unmarshal([]byte(os.ExpandEnv(string(data))), config); err != nil {
 			panic(err)
 		}
-		log.Debug("Config loaded successfully with custom config file")
+		//log.Debug("Config loaded successfully with custom config file")
 		return customConfigFile
 	}
 
-	log.Debug("Config loaded successfully")
+	//log.Debug("Config loaded successfully")
 	return configFile
 }
 
