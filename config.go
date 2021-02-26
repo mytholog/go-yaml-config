@@ -8,7 +8,7 @@ import (
 	"strings"
 
 	"github.com/jinzhu/copier"
-	"gopkg.in/yaml.v2"
+	yaml "gopkg.in/yaml.v3"
 )
 
 //LoadConfigFromFile loading config from yaml file
